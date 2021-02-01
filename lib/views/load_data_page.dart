@@ -34,7 +34,6 @@ class _LoadDataPageState extends State<LoadDataPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loadData();
   }

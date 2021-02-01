@@ -43,11 +43,15 @@ class _UserInfoInputPageState extends State<UserInfoInputPage> {
     if (signupRes == 1) {
       // upload data to db
       final _dbService = FireStoreService(_firestore, _auth.currentUser.uid);
+      final assignedShop = await _dbService.getClosestShopInRange(
+          userLat: currentPosition.latitude,
+          userLong: currentPosition.longitude);
       final uploadData = {
         'name': inputName,
         'phoneNumber': inputPhoneNumber,
         'uid': _auth.currentUser.uid,
         'email': _auth.currentUser.email,
+        'selectedAddressIndex': 0,
         'address': [
           {
             'address': inputAddress,
@@ -56,6 +60,7 @@ class _UserInfoInputPageState extends State<UserInfoInputPage> {
             'landmark': inputLandmark,
             'latitude': currentPosition.latitude,
             'longitude': currentPosition.longitude,
+            'assignedShop': assignedShop.tojson(),
           },
         ],
       };
@@ -70,6 +75,7 @@ class _UserInfoInputPageState extends State<UserInfoInputPage> {
       final prefs = SharedPreferencesService();
       await prefs.saveToPrefs(user.activeUser);
       //navigate to home
+      print(assignedShop.name);
       Navigator.pushReplacementNamed(context, '/home');
     }
   }

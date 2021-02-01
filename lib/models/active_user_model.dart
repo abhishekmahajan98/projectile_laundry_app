@@ -3,10 +3,17 @@ class ActiveUserModel {
   final String email;
   final String phoneNumber;
   final String uid;
+  final int selectedAddressIndex;
   final List address;
 
-  ActiveUserModel(
-      {this.name, this.phoneNumber, this.uid, this.address, this.email});
+  ActiveUserModel({
+    this.name,
+    this.phoneNumber,
+    this.uid,
+    this.address,
+    this.email,
+    this.selectedAddressIndex,
+  });
 
   factory ActiveUserModel.fromJson(Map<String, dynamic> json) {
     return ActiveUserModel(
@@ -15,6 +22,7 @@ class ActiveUserModel {
       uid: json['uid'],
       address: json['address'],
       email: json['email'],
+      selectedAddressIndex: json['selectedAddressIndex'],
     );
   }
 
@@ -25,6 +33,7 @@ class ActiveUserModel {
       'uid': uid,
       'address': address,
       'email': email,
+      'selectedAddressIndex': selectedAddressIndex,
     };
   }
 }
