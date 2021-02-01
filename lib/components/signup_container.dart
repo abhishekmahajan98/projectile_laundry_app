@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/all.dart';
-import 'package:projectilelaundryapp/providers/authentication_providers.dart';
 
 import '../constants.dart';
 
@@ -23,9 +22,6 @@ class SignUp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    String email = watch(signupEmailProvider).state;
-    String password = watch(signupPasswordProvider).state;
-    final _auth = watch(authenticationServiceProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.center,
