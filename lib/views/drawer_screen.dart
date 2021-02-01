@@ -3,11 +3,15 @@ import 'package:flutter_riverpod/all.dart';
 import 'package:projectilelaundryapp/components/drawer_item.dart';
 import 'package:projectilelaundryapp/constants.dart';
 import 'package:projectilelaundryapp/providers/authentication_providers.dart';
+import 'package:projectilelaundryapp/providers/shared_preferences_provider.dart';
+import 'package:projectilelaundryapp/providers/user_data_provider.dart';
 
 class DrawerScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final _auth = watch(authenticationServiceProvider);
+    final prefs = watch(prefsProvider);
+    final user = watch(userDataProvider);
     return Container(
       color: blurredMainColor,
       padding: EdgeInsets.only(top: 50, bottom: 70, left: 10),
@@ -20,7 +24,7 @@ class DrawerScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'A Projectile Tech',
+                    user.activeUser.email,
                     style: TextStyle(
                       color: mainColor,
                       fontWeight: FontWeight.bold,
@@ -82,7 +86,15 @@ class DrawerScreen extends ConsumerWidget {
                 width: 10,
               ),
               GestureDetector(
-                onTap: () => _auth.logout(),
+                onTap: () async {
+                  await prefs.clearPrefs();
+                  _auth.logout();
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/login',
+                    (Route<dynamic> route) => false,
+                  ).then((value) => user.assignUser(null));
+                },
                 child: Text(
                   'Log out',
                   style:

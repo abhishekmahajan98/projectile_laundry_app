@@ -1,40 +1,33 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
+import 'package:projectilelaundryapp/constants.dart';
 import 'package:projectilelaundryapp/providers/user_data_provider.dart';
-import 'package:projectilelaundryapp/services/authentication_service.dart';
+import 'package:projectilelaundryapp/services/firestore_service.dart';
 import 'package:projectilelaundryapp/services/shared_preferences_service.dart';
 
-import '../constants.dart';
-
 final _firebaseAuth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance;
 
-class SplashPage extends StatefulWidget {
+class LoadDataPage extends StatefulWidget {
   @override
-  _SplashPageState createState() => _SplashPageState();
+  _LoadDataPageState createState() => _LoadDataPageState();
 }
 
-class _SplashPageState extends State<SplashPage> {
+class _LoadDataPageState extends State<LoadDataPage> {
   final prefs = SharedPreferencesService();
 
-  final _auth = AuthenticationService(_firebaseAuth);
+  final _db = FireStoreService(_firestore, _firebaseAuth.currentUser.uid);
 
   void loadData() async {
     final user = context.read(userDataProvider);
-    prefs.checkPrefs().then(
-      (prefData) async {
-        if (prefData == true && _auth.loggedInUser != null) {
-          await prefs.loadFromPrefs().then(
-            (userData) {
-              user.assignUser(userData);
-              Navigator.pushReplacementNamed(context, '/home');
-            },
-          );
-        }
-        if (_auth.loggedInUser == null) {
-          await prefs.clearPrefs();
-          Navigator.pushReplacementNamed(context, '/login');
-        }
+    await _db.getUserData().then(
+      (value) async {
+        user.assignUser(value);
+        await prefs.saveToPrefs(value).then(
+              (value) => Navigator.pushReplacementNamed(context, '/home'),
+            );
       },
     );
   }
@@ -48,6 +41,7 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    //final user = watch(userDataProvider);
     return Scaffold(
       backgroundColor: mainColor,
       body: Center(

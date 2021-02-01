@@ -10,3 +10,6 @@ final authenticationServiceProvider = Provider<AuthenticationService>((ref) {
 
 final authStateChangesProvider = StreamProvider<User>(
     (ref) => ref.watch(firebaseAuthProvider).authStateChanges());
+
+final userIdProvider = StateProvider<String>(
+    (ref) => ref.watch(firebaseAuthProvider).currentUser.uid);

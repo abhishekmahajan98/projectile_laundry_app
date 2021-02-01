@@ -5,7 +5,8 @@ import 'package:projectilelaundryapp/components/login_option_button.dart';
 import 'package:projectilelaundryapp/components/signup_container.dart';
 import 'package:projectilelaundryapp/components/signup_option_button.dart';
 import 'package:projectilelaundryapp/constants.dart';
-import 'package:projectilelaundryapp/providers/login_page_providers.dart';
+
+final loginPageStateProvider = StateProvider<bool>((ref) => true);
 
 class LoginPage extends ConsumerWidget {
   void changeLoginPageState(BuildContext context, bool state) {

@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/all.dart';
-import 'package:projectilelaundryapp/providers/login_page_providers.dart';
+import 'package:projectilelaundryapp/providers/authentication_providers.dart';
 
 import '../constants.dart';
 
+final signupEmailProvider = StateProvider<String>((ref) {
+  return null;
+});
+final signupPasswordProvider = StateProvider<String>((ref) {
+  return null;
+});
+
 class SignUp extends ConsumerWidget {
-  void updateSignupEmailState(BuildContext context, String email) {
-    context.read(signupEmailState).state = email;
+  void updateEmail(BuildContext context, String email) {
+    context.read(signupEmailProvider).state = email;
   }
 
-  void updateSignupPasswordState(BuildContext context, String pass) {
-    context.read(signupPasswordState).state = pass;
+  void updatePassword(BuildContext context, String pass) {
+    context.read(signupPasswordProvider).state = pass;
   }
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    String email = watch(signupEmailState).state;
-    String password = watch(signupPasswordState).state;
+    String email = watch(signupEmailProvider).state;
+    String password = watch(signupPasswordProvider).state;
+    final _auth = watch(authenticationServiceProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -44,7 +52,8 @@ class SignUp extends ConsumerWidget {
           height: 16,
         ),
         TextField(
-          onChanged: (value) => updateSignupEmailState(context, value),
+          onChanged: (value) => updateEmail(context, value),
+          keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             hintText: 'Enter Email',
             hintStyle: TextStyle(
@@ -68,7 +77,8 @@ class SignUp extends ConsumerWidget {
           height: 16,
         ),
         TextField(
-          onChanged: (value) => updateSignupPasswordState(context, value),
+          onChanged: (value) => updatePassword(context, value),
+          keyboardType: TextInputType.text,
           obscureText: true,
           decoration: InputDecoration(
             hintText: 'Password',
@@ -93,9 +103,15 @@ class SignUp extends ConsumerWidget {
           height: 24,
         ),
         GestureDetector(
-          onTap: () {
-            print(email);
-            print(password);
+          onTap: () async {
+            /*await _auth.emailSignUp(email: email, password: password).then(
+              (value) {
+                updateEmail(context, null);
+                updatePassword(context, null);
+                Navigator.pushNamed(context, '/buffer_page');
+              },
+            );*/
+            Navigator.pushNamed(context, '/user_info_input');
           },
           child: Container(
             height: 40,

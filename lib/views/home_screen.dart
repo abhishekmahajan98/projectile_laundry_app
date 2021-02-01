@@ -1,3 +1,4 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:projectilelaundryapp/components/home_service_page_button.dart';
@@ -85,9 +86,12 @@ class HomeScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-              Card(
-                child: Placeholder(
-                  fallbackHeight: 250,
+              Container(
+                height: 300,
+                color: blurredMainColor,
+                child: FlareActor(
+                  'assets/flares/big_laundry_machine.flr',
+                  animation: 'Untitled',
                 ),
               ),
               Card(
